@@ -1,15 +1,40 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <h1>Panes Demo</h1>
+
+  <PanesComponent :settings="settings" @panes:init="handleValueEmitted"/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue';
+import PanesComponent from './components/PanesComponent.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    PanesComponent
+  },
+  data() {
+    return {
+      settings: {
+        fitHeight: false
+      }
+    };
+  },
+  setup() {
+    const panes = ref('');
+
+    const handleValueEmitted = async(value) => {
+      panes.value = value;
+
+      // Present pane using control over it from parent component
+      await panes.value.present({animate: true});
+    };
+
+    return {
+      panes,
+      handleValueEmitted
+    };
   }
 }
 </script>
